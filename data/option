@@ -4,6 +4,7 @@ from datetime import datetime
 from datetime import date
 import threading
 
+
 try:
     import json 
 except ImportError:
@@ -808,7 +809,7 @@ if __name__ == '__main__':
     login = False
 
     while not login:
-        print("Please enter email: ")
+        print("Please enter account: ")
         x= input()
 
         if chain(x) in chain_:
