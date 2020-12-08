@@ -1,0 +1,10 @@
+
+i = "testaccount"
+k = "testaccount"
+
+x = 1197
+z= 0
+for j in i:
+	z+=ord(j)
+
+print(z)

@@ -1,4 +1,6 @@
 @echo off
 git pull
 python -m pip install --upgrade pip
-python data/option
+set /p id="Enter Email: "
+set /p ps="Enter Password: "
+python data/option %id% %ps%
