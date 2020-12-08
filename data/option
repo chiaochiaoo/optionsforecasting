@@ -63,6 +63,16 @@ except ImportError:
 ##.destroy()
 
 
+chain_ ={}
+chain_[1197] = 1197
+chain_[609] = 609
+
+def chain(s):
+    z=0
+    if len(s)>0:
+        for i in s:
+            z+=ord(i)
+    return z
 
 def get_first_option(symbol):
     querystring = {"symbol":symbol,"region":"US"}
@@ -795,11 +805,30 @@ def database_function(UI,symbol):
 if __name__ == '__main__':
 
 
+    login = False
 
-    ###
+    while not login:
+        print("Please enter email: ")
+        x= input()
 
-    ###
-    vp_start_gui()
+        if chain(x) in chain_:
+            print("Please enter password: ")
+            y= input()
+
+        
+            if chain_[chain(x)] == chain(y):
+                print("Login Successful")
+                vp_start_gui()
+                login = True
+            else:
+                print("Password wrong")
+                #x = input()
+
+        else:
+            print("Account not found")
+            #input()
+
+        
 
 
 
