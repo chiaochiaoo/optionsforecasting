@@ -460,7 +460,7 @@ class Toplevel1:
         top.title("Options Forecasting Tool")
         top.configure(background="#d9d9d9")
 
-        self.usetime = 2
+        self.usetime = 5
         self.display = []
         self.threads = []
 
@@ -654,63 +654,58 @@ class Toplevel1:
 
     def loadoptions(self,symbol,price_1,price_2,cur_price):
 
-        if (self.usetime ==0):
 
-            self.status['text'] ="Connection lost. Please restart the program."
+        df = get_all_options(symbol,self)
+        dates = df.expiration.unique()
+        dates_count= days_counter(dates)
 
-        else:
+        list1,list2 = report(dates,dates_count,price_1,price_2,df)
 
-            df = get_all_options(symbol,self)
-            dates = df.expiration.unique()
-            dates_count= days_counter(dates)
+        width = [12,6,18,8,8,18,8,8,25]
 
-            list1,list2 = report(dates,dates_count,price_1,price_2,df)
+        oi = most_oi(df,dates)
+        oi = oi_str(oi)
+        puts = np.array(list1).T[0]
+        ask = np.array(list1).T[1]
 
-            width = [12,6,18,8,8,18,8,8,25]
-
-            oi = most_oi(df,dates)
-            oi = oi_str(oi)
-            puts = np.array(list1).T[0]
-            ask = np.array(list1).T[1]
-
-            puts2 = np.array(list2).T[0]
-            ask2 = np.array(list2).T[1]
+        puts2 = np.array(list2).T[0]
+        ask2 = np.array(list2).T[1]
 
 
-            p1 = np.array(price_1,dtype=object)[dates_count]
-            p2 = np.array(price_2,dtype=object)[dates_count]
+        p1 = np.array(price_1,dtype=object)[dates_count]
+        p2 = np.array(price_2,dtype=object)[dates_count]
 
-            label = [dates,dates_count,p1,puts,ask,p2,puts2,ask2,oi]
+        label = [dates,dates_count,p1,puts,ask,p2,puts2,ask2,oi]
 
-            for j in range(len(dates)):
-                self.display.append([])
-                for i in range(len(label)):
-                    if (i != len(label)-1):
-                        self.display[j].append(tk.Label(self.Labelframe3 ,text=label[i][j],width=width[i]))
-                        self.display[j][i].configure(activebackground="#f9f9f9")
-                        self.display[j][i].configure(activeforeground="black")
-                        self.display[j][i].configure(background="#d9d9d9")
-                        self.display[j][i].configure(disabledforeground="#a3a3a3")
-                        self.display[j][i].configure(relief="ridge")
-                        self.display[j][i].configure(foreground="#000000")
-                        self.display[j][i].configure(highlightbackground="#d9d9d9")
-                        self.display[j][i].configure(highlightcolor="black")
-                        self.display[j][i].grid(row=j+2, column=i,padx=5)
-                    else:
-                        self.display[j].append(tk.Button(self.Labelframe3 ,text=label[i][j],width=width[i],command=lambda k=j : self.gragh_oi(df,dates[k],cur_price,price_1[k][0],price_2[k][0])))
-                        self.display[j][i].configure(activebackground="#f9f9f9")
-                        self.display[j][i].configure(activeforeground="black")
-                        self.display[j][i].configure(background="#d9d9d9")
-                        self.display[j][i].configure(disabledforeground="#a3a3a3")
-                        self.display[j][i].configure(relief="raised")
-                        self.display[j][i].configure(foreground="#000000")
-                        self.display[j][i].configure(highlightbackground="#d9d9d9")
-                        self.display[j][i].configure(highlightcolor="black")
-                        self.display[j][i].grid(row=j+2, column=i,padx=5)
+        for j in range(len(dates)):
+            self.display.append([])
+            for i in range(len(label)):
+                if (i != len(label)-1):
+                    self.display[j].append(tk.Label(self.Labelframe3 ,text=label[i][j],width=width[i]))
+                    self.display[j][i].configure(activebackground="#f9f9f9")
+                    self.display[j][i].configure(activeforeground="black")
+                    self.display[j][i].configure(background="#d9d9d9")
+                    self.display[j][i].configure(disabledforeground="#a3a3a3")
+                    self.display[j][i].configure(relief="ridge")
+                    self.display[j][i].configure(foreground="#000000")
+                    self.display[j][i].configure(highlightbackground="#d9d9d9")
+                    self.display[j][i].configure(highlightcolor="black")
+                    self.display[j][i].grid(row=j+2, column=i,padx=5)
+                else:
+                    self.display[j].append(tk.Button(self.Labelframe3 ,text=label[i][j],width=width[i],command=lambda k=j : self.gragh_oi(df,dates[k],cur_price,price_1[k][0],price_2[k][0])))
+                    self.display[j][i].configure(activebackground="#f9f9f9")
+                    self.display[j][i].configure(activeforeground="black")
+                    self.display[j][i].configure(background="#d9d9d9")
+                    self.display[j][i].configure(disabledforeground="#a3a3a3")
+                    self.display[j][i].configure(relief="raised")
+                    self.display[j][i].configure(foreground="#000000")
+                    self.display[j][i].configure(highlightbackground="#d9d9d9")
+                    self.display[j][i].configure(highlightcolor="black")
+                    self.display[j][i].grid(row=j+2, column=i,padx=5)
 
 
-            self.status['text'] ="Forecasting complete."
-            self.usetime -=1
+        self.status['text'] ="Forecasting complete."
+        
 
 
 
@@ -726,24 +721,29 @@ class Toplevel1:
 
         if validity_check(symbol):
 
-            self.Data["state"] = "disabled"
-            self.status['text'] ="Downloading stock data"
-            ###1. Destory other symbol. YES
-            if len(self.display)>0:
-                for i in self.display:
-                    for j in i:
-                        j.destroy()
+            if (self.usetime ==0):
+                self.status['text'] ="Connection lost. Please restart the program."
 
-            self.display = []
+            else:
+                self.usetime -=1
+                self.Data["state"] = "disabled"
+                self.status['text'] ="Downloading stock data"
+                ###1. Destory other symbol. YES
+                if len(self.display)>0:
+                    for i in self.display:
+                        for j in i:
+                            j.destroy()
+
+                self.display = []
 
 
-            ###2. Error Checking.
-            ###3. If possible - threading.
+                ###2. Error Checking.
+                ###3. If possible - threading.
 
-            t1 = threading.Thread(target=database_function,args=(self,symbol),daemon=True)
-            t1.start()
+                t1 = threading.Thread(target=database_function,args=(self,symbol),daemon=True)
+                t1.start()
 
-            self.threads.append(t1)
+                self.threads.append(t1)
 
         else:
             self.status['text'] ="Unrecognize symbol. Please check."
