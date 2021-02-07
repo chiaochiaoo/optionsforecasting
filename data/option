@@ -215,6 +215,8 @@ def get_all_options(symbol,ui):
             print("Donwloading "+dates[i]+" failed")
 
     df = pd.DataFrame(ls,columns=cols)
+
+    df['openInterest'] = df['openInterest'].fillna(value=0)
     #df.to_csv(symbol+"_options.csv",index=False)
     return df
 
@@ -235,13 +237,16 @@ def days_counter(dates):
 
     return length
 
-
+#testacc
 def most_oi(df,dates):
     ls = []
     for i in dates:
         d = i
+
         p = df.loc[(df["expiration"]==d)&(df["type"]=="puts")].copy().reset_index()
+        print(i,p["openInterest"])
         p = p.loc[p["openInterest"]==max(p["openInterest"])].copy().reset_index()
+        print(i,p["openInterest"])
         strike=p["strike"].values[0]
         bid = p["bid"].values[0]
         ls.append((strike,bid))
@@ -274,8 +279,6 @@ def report(dates,dates_count,price_1,price_2,df):
         bid2 = 0
 
         try:
-            print(target1["strike"])
-            print(target1["bid"])
             if len(target1)>0:
                 target1 = target1.loc[target1["bid"]==max(target1["bid"])].copy().reset_index()
                 #target1 = target1.loc[target1["strike"]==min(target1["strike"])]
@@ -288,7 +291,9 @@ def report(dates,dates_count,price_1,price_2,df):
                 bid2 = target2["bid"].values[0]
             #Third, pick the lowest strike. 
         except:
-            print("Nan Value received")
+            print("Nan Value received on ",i)
+            print(target1["strike"])
+            print(target1["bid"])
 
         list1.append((round(strike1,2),round(bid1,2)))
         list2.append((round(strike2,2),round(bid2,2)))
@@ -632,6 +637,7 @@ class Toplevel1:
 
 
         df = get_all_options(symbol,self)
+        print(df)
         dates = df.expiration.unique()
         dates_count= days_counter(dates)
 
