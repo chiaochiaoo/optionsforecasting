@@ -217,6 +217,8 @@ def get_all_options(symbol,ui):
     df = pd.DataFrame(ls,columns=cols)
 
     df['openInterest'] = df['openInterest'].fillna(value=0)
+    df['bid'] = df['bid'].fillna(value=0)
+    
     #df.to_csv(symbol+"_options.csv",index=False)
     return df
 
