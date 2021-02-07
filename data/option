@@ -268,26 +268,27 @@ def report(dates,dates_count,price_1,price_2,df):
         target2 = df.loc[(df["expiration"]==dates[i])&(df["type"]=="puts")&(df["strike"]<price_2[dates_count[i]][0])].copy().reset_index()
 
         #Second, pick the highest bid
-
         strike1 = 0
         bid1 =0
         strike2 =0
         bid2 = 0
 
-        print(target1["strike"])
-        print(target1["bid"])
-        if len(target1)>0:
-            target1 = target1.loc[target1["bid"]==max(target1["bid"])].copy().reset_index()
-            #target1 = target1.loc[target1["strike"]==min(target1["strike"])]
-            strike1 = target1["strike"].values[0]
-            bid1 = target1["bid"].values[0]
-        if len(target2)>0:
-            target2 = target2.loc[target2["bid"]==max(target2["bid"])].copy().reset_index()
-            #target2 = target2.loc[target2["strike"]==min(target2["strike"])]
-            strike2 = target2["strike"].values[0]
-            bid2 = target2["bid"].values[0]
-        #Third, pick the lowest strike. 
-
+        try:
+            print(target1["strike"])
+            print(target1["bid"])
+            if len(target1)>0:
+                target1 = target1.loc[target1["bid"]==max(target1["bid"])].copy().reset_index()
+                #target1 = target1.loc[target1["strike"]==min(target1["strike"])]
+                strike1 = target1["strike"].values[0]
+                bid1 = target1["bid"].values[0]
+            if len(target2)>0:
+                target2 = target2.loc[target2["bid"]==max(target2["bid"])].copy().reset_index()
+                #target2 = target2.loc[target2["strike"]==min(target2["strike"])]
+                strike2 = target2["strike"].values[0]
+                bid2 = target2["bid"].values[0]
+            #Third, pick the lowest strike. 
+        except:
+            print("Nan Value received")
 
         list1.append((round(strike1,2),round(bid1,2)))
         list2.append((round(strike2,2),round(bid2,2)))
@@ -597,31 +598,6 @@ class Toplevel1:
             self.b.grid(sticky = "w",row=row,padx=5)
             row +=1
             self.ratings.append(self.b)
-
-
-        # for i in range(len(text)):
-        #     self.label1 = tk.Label(self.Labelframe2 ,text=text[i],width=8)
-
-        #     self.label1.configure(activebackground="#f9f9f9")
-        #     self.label1.configure(activeforeground="black")
-        #     self.label1.configure(background="yellow")
-        #     self.label1.configure(disabledforeground="#a3a3a3")
-        #     self.label1.configure(relief="ridge")
-        #     self.label1.configure(foreground="#000000")
-        #     self.label1.configure(highlightbackground="#d9d9d9")
-        #     self.label1.configure(highlightcolor="black")
-        #     self.label1.grid(row=i//2, column=i*2,padx=5)
-        # # s= ''
-        # t= '00.00'
-        # text =  "Symbol: {}    Last Price: {}    \n Weekly Volitality: {}%  Monthly Volitality: {}%".format(s, t,t,t)
-
-        # self.Labels = tk.Label(self.Labelframe2)
-        # self.Labels.place(relx=0.011, rely=0.476#, #height=21 #width=104
-        #         , bordermode='ignore')
-        # self.Labels.configure(background="#d9d9d9")
-        # self.Labels.configure(disabledforeground="#a3a3a3")
-        # self.Labels.configure(foreground="#000000")
-        # self.Labels.configure(text=text)
 
 
         self.Labelframe3 = tk.LabelFrame(top)
