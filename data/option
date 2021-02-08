@@ -779,10 +779,11 @@ def database_function(UI,symbol):
     price_1,price_2= database(symbol,900,price,vol)
 
 
-    for j in range(max(len(analyst_ratings),5)):
-        a = analyst_ratings[j]
-        te = "Date: {}  Analyst: {}   Rating: {}  Price from: {} to {}".format(a["date"],a["analyst"],a["rating"],a["price_from"],a["price_to"])
-        UI.ratings[j]["text"] = te
+    if len(analyst_ratings)>0:
+        for j in range(max(len(analyst_ratings),5)):
+            a = analyst_ratings[j]
+            te = "Date: {}  Analyst: {}   Rating: {}  Price from: {} to {}".format(a["date"],a["analyst"],a["rating"],a["price_from"],a["price_to"])
+            UI.ratings[j]["text"] = te
 
     # UI.Labels["text"] = " Symbol: {}    Last Price: {}    Weekly Volitality: {}%  Monthly Volitality: {}%".format(symbol, cur_price,vol,day_vol)
 
