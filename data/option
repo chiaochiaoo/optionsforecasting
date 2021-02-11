@@ -205,7 +205,10 @@ def get_all_options(symbol,ui):
     #now add the remaining ones.
     #for i in range(1,2):
 
-    for i in range(1,min(len(dates),8)):
+    print("Total dates:",len(dates))
+
+    for i in range(1,len(dates)):
+    #for i in range(1,min(len(dates),8)):
         #ui.status['text'] ="Processing date:","{: %Y-%m-%d}".format(datetime.fromtimestamp(dates[i]+3600*5))
         ui.status['text'] ="Downloading data and Forecasting... "+str(percentage*i)+" %"
         try:
@@ -246,9 +249,9 @@ def most_oi(df,dates):
         d = i
 
         p = df.loc[(df["expiration"]==d)&(df["type"]=="puts")].copy().reset_index()
-        print(i,p["openInterest"])
+        #print(i,p["openInterest"])
         p = p.loc[p["openInterest"]==max(p["openInterest"])].copy().reset_index()
-        print(i,p["openInterest"])
+        #print(i,p["openInterest"])
         strike=p["strike"].values[0]
         bid = p["bid"].values[0]
         ls.append((strike,bid))
@@ -461,8 +464,8 @@ class Toplevel1:
         _ana1color = '#d9d9d9' # X11 color: 'gray85'
         _ana2color = '#ececec' # Closest X11 color: 'gray92'
 
-        top.geometry("1019x1031+836+229")
-        top.minsize(120, 1)
+        top.geometry("1100x1000+836+229")
+        top.minsize(1100, 1000)
         top.maxsize(2564, 1421)
         top.resizable(1,  1)
         top.title("Options Forecasting Tool")
@@ -553,7 +556,7 @@ class Toplevel1:
 
 
         self.Labelframe2b = tk.LabelFrame(top)
-        self.Labelframe2b.place(relx=0.079, rely=0.24, relheight=0.12
+        self.Labelframe2b.place(relx=0.079, rely=0.24, relheight=0.13
                 , relwidth=0.85)
         self.Labelframe2b.configure(relief='groove')
         self.Labelframe2b.configure(foreground="black")
@@ -639,7 +642,7 @@ class Toplevel1:
 
 
         df = get_all_options(symbol,self)
-        print(df)
+        #print(df)
         dates = df.expiration.unique()
         dates_count= days_counter(dates)
 
