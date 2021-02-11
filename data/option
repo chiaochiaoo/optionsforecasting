@@ -784,8 +784,10 @@ def database_function(UI,symbol):
 
     if len(analyst_ratings)>0:
         for j in range(max(len(analyst_ratings),5)):
+            #print(analyst_ratings[j])
             a = analyst_ratings[j]
-            te = "Date: {}  Analyst: {}   Rating: {}  Price from: {} to {}".format(a["date"],a["analyst"],a["rating"],a["price_from"],a["price_to"])
+            te = "Date: {}  Analyst: {}   Rating: {} , {}".format(a["date"],a["analyst"],a["rating"],a["category"])
+            #te = "Date: {}  Analyst: {}   Rating: {}  Price from: {} to {}".format(a["date"],a["analyst"],a["rating"],a["price_from"],a["price_to"])'category':
             UI.ratings[j]["text"] = te
 
     # UI.Labels["text"] = " Symbol: {}    Last Price: {}    Weekly Volitality: {}%  Monthly Volitality: {}%".format(symbol, cur_price,vol,day_vol)
